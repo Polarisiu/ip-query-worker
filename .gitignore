@@ -167,5 +167,8 @@ dist
 .wrangler/
 .vscode/
 .claude/
+.codex/
+.gemini/
+.opencode/
 CLAUDE.md
 .DS_Store
