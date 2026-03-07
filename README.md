@@ -18,18 +18,24 @@
 
 ## 📸 界面预览
 
+最新界面预览如下，包含更新后的 WebRTC 检测区域。
+
 #### ☀️ 日间模式
 
-![IP 哨兵 - 日间模式](docs/screenshot.png)
+<p align="center">
+  <img src="docs/screenshot.png" width="900" alt="IP 哨兵 - 日间模式" />
+</p>
 
 #### 🌙 夜间模式
 
-![IP 哨兵 - 夜间模式](docs/screenshot-dark.png)
+<p align="center">
+  <img src="docs/screenshot-dark.png" width="900" alt="IP 哨兵 - 夜间模式" />
+</p>
 
 ## ✨ 功能特性
 
 ### 🌐 多源 IP 检测
-同时从 **8 个不同的数据源** 获取你的出口 IP，直观对比各平台看到的真实连接信息：
+同时从 **9 个不同的数据源** 获取你的出口 IP，直观对比各平台看到的真实连接信息：
 
 | 数据源 | 描述 |
 |--------|------|
@@ -42,7 +48,6 @@
 | **OpenAI** | 通过 `openai.com` 的 CDN Trace 检测 |
 | **Grok** | 通过 `grok.com` 的 CDN Trace 检测 |
 | **WebRTC 探测** | 通过 RTCPeerConnection ICE candidates 检测 IP 泄漏 |
-| **DNS 探测** | 通过 DoH 查询检测 DNS 解析器和出口 IP |
 
 ### 🔍 IP 深度分析
 点击任意 IP 地址，查看来自 [ipapi.is](https://ipapi.is) 的详细情报：
@@ -57,7 +62,6 @@
 ### 🎯 VPN / 代理泄漏检测
 通过对比多个数据源返回的 IP 和地理位置，快速判断是否存在：
 - 代理/VPN 泄漏（不同平台看到不同 IP）
-- **DNS 泄漏** — 通过 Cloudflare DoH 和 Google DNS 检测实际使用的 DNS 解析器
 - **WebRTC 泄漏** — 通过 RTCPeerConnection ICE candidates 检测本地/公网 IP 暴露
 
 ## 🛠️ 技术架构
@@ -193,9 +197,6 @@ ip-query-worker/
 | `api.ipapi.is` | 综合 IP 情报（含风控） | Worker 中转 |
 | `*/cdn-cgi/trace` | CDN 出口 IP | 浏览器直连 |
 | `RTCPeerConnection` | WebRTC 泄漏检测（本地/公网 IP） | 浏览器 API |
-| `cloudflare-dns.com` | DNS 解析器检测（DoH） | 浏览器直连 |
-| `dns.google` | DNS 解析器检测（备用 DoH） | 浏览器直连 |
-| `1.1.1.1/cdn-cgi/trace` | DNS 出口 IP 和位置 | 浏览器直连 |
 
 ## 📝 许可证
 

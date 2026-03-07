@@ -42,15 +42,6 @@ describe('worker API hardening', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it('returns 405 for non-GET /api/cf-trace', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch');
-    const response = await runRequest(new Request('https://example.com/api/cf-trace', { method: 'POST' }));
-
-    expect(response.status).toBe(405);
-    expect(response.headers.get('allow')).toBe('GET, OPTIONS');
-    expect(fetchSpy).not.toHaveBeenCalled();
-  });
-
   it('falls back CORS allow-origin to self origin for cross-origin calls', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response(JSON.stringify({ ip: '1.1.1.1' }), {

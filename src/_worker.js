@@ -165,51 +165,6 @@ export default {
       }
     }
 
-    if (url.pathname === '/api/cf-trace') {
-      if (request.method !== 'GET') {
-        return new Response(JSON.stringify({ error: 'Method Not Allowed' }), {
-          status: 405,
-          headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'Allow': 'GET, OPTIONS',
-            ...corsHeaders,
-            ...SECURITY_HEADERS,
-          },
-        });
-      }
-
-      try {
-        const response = await fetch('https://1.1.1.1/cdn-cgi/trace', {
-          headers: { 'Accept': 'text/plain' },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const text = await response.text();
-        const traceIP = text.match(/ip=([^\n]+)/)?.[1] || null;
-        const traceLocation = text.match(/loc=([^\n]+)/)?.[1] || null;
-
-        return new Response(JSON.stringify({ ip: traceIP, location: traceLocation }), {
-          headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'Cache-Control': 'public, max-age=15',
-            ...corsHeaders,
-            ...SECURITY_HEADERS,
-          },
-        });
-      } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
-          status: 502,
-          headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            ...corsHeaders,
-            ...SECURITY_HEADERS,
-          },
-        });
-      }
-    }
-
     // 获取 Cloudflare 识别的访问者信息
     const cf = request.cf || {};
     const clientIp = request.headers.get("cf-connecting-ip") ||
@@ -460,8 +415,6 @@ function renderHtml(initData) {
       const ExternalLink = ({ className = 'w-4 h-4' }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>;
       // WiFi 图标（WebRTC 探测）
       const Wifi = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h.01"></path><path d="M2 8.82a15 15 0 0 1 20 0"></path><path d="M5 12.859a10 10 0 0 1 14 0"></path><path d="M8.5 16.429a5 5 0 0 1 7 0"></path></svg>;
-      // DNS 图标
-      const Dns = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line><line x1="10" y1="6" x2="18" y2="6"></line><line x1="10" y1="18" x2="18" y2="18"></line></svg>;
       const X = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>;
       const Shield = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>;
       const Server = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" x2="6" y1="6" y2="6"></line><line x1="6" x2="6" y1="18" y2="18"></line></svg>;
