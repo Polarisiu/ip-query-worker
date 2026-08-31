@@ -341,7 +341,7 @@ function renderHtml(initData) {
     <!-- React & Babel -->
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.7/babel.min.js"></script>
 
     <script>
       // 注入服务端获取的初始数据（已转义，防止 XSS）
@@ -669,6 +669,122 @@ function renderHtml(initData) {
       html.dark .subtle-pill {
         border-color: rgba(129, 140, 248, 0.12);
         background: linear-gradient(180deg, rgba(22, 30, 46, 0.88), rgba(11, 17, 28, 0.96));
+      }
+      .connectivity-section {
+        margin-top: 28px;
+      }
+      .connectivity-panel {
+        padding: 0;
+      }
+      .connectivity-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+      @media (min-width: 768px) {
+        .connectivity-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (min-width: 1024px) {
+        .connectivity-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+      .connectivity-card {
+        min-width: 0;
+        border: 1px solid var(--surface-border);
+        border-radius: 1rem;
+        background: linear-gradient(180deg, var(--surface-top), var(--surface));
+        box-shadow: var(--shadow-soft), inset 0 1px 0 var(--surface-highlight);
+        backdrop-filter: blur(24px) saturate(160%);
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      html.dark .connectivity-card {
+        border-color: var(--surface-border);
+      }
+      .connectivity-card:hover {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-top) 90%, white 10%), color-mix(in srgb, var(--surface) 92%, white 8%));
+      }
+      html.dark .connectivity-card:hover {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-top) 92%, white 8%), color-mix(in srgb, var(--surface) 96%, white 4%));
+      }
+      .connectivity-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        object-fit: contain;
+        flex: 0 0 auto;
+      }
+      .connectivity-main {
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+      .connectivity-name {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.82rem;
+        font-weight: 600;
+        line-height: 1.25;
+        color: var(--brand);
+      }
+      .connectivity-dots {
+        display: flex;
+        gap: 2px;
+        margin-top: 4px;
+      }
+      .connectivity-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 9999px;
+      }
+      .connectivity-ms {
+        min-width: 4.2em;
+        text-align: right;
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      .connectivity-ms-value {
+        display: inline-block;
+        animation: latencyNumberSwap 260ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      @keyframes latencyNumberSwap {
+        0% { opacity: 0; transform: translateY(5px); filter: blur(2px); }
+        100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+      }
+      @media (max-width: 768px) {
+        .connectivity-panel {
+          padding: 0;
+        }
+        .connectivity-card {
+          padding: 7px 8px;
+          gap: 6px;
+        }
+        .connectivity-name {
+          font-size: 0.78rem;
+        }
+        .connectivity-ms {
+          font-size: 0.86rem;
+        }
+        .connectivity-dot {
+          width: 5px;
+          height: 5px;
+        }
+      }
+      @media (max-width: 360px) {
+        .connectivity-grid {
+          grid-template-columns: 1fr;
+        }
       }
       .icon-button {
         display: inline-flex;
@@ -1069,6 +1185,10 @@ function renderHtml(initData) {
       // --- 图标 Data URIs (内嵌 SVG) ---
       const ICONS = {
         cloudflare: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23F48120' d='M35.1 14.8c-1.1 0-2.1.3-3.1.8-1.4-5.2-6.2-9-11.8-9-5.9 0-10.9 4.2-12.1 9.8C3.5 17 0 21.6 0 27s3.5 10 8.1 10.5h26.8c7.2 0 13.1-5.9 13.1-13.1 0-5.2-3-9.7-7.5-11.9-.6.2-1.1.3-1.7.3z'/%3E%3Cpath fill='%23F48120' d='M28.8 13.8c.8 0 1.6.1 2.3.4C29.7 9.9 25.4 6.8 20.2 6.8c-5.5 0-10.1 3.6-11.6 8.6 2.8-.8 5.8-1.3 9-1.3 4.2-.1 8.2.9 11.2 2.7z'/%3E%3C/svg%3E",
+        bytedance: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23f8fafc'/%3E%3Cpath d='M10 15h6v22h-6z' fill='%234f46e5'/%3E%3Cpath d='M21 22h6v15h-6z' fill='%2306b6d4'/%3E%3Cpath d='M32 11h6v26h-6z' fill='%235eead4'/%3E%3C/svg%3E",
+        github: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2324292f'%3E%3Cpath d='M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.2.9 2.4v3.5c0 .3.2.7.8.6A12 12 0 0 0 12 .5z'/%3E%3C/svg%3E",
+        youtube: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='4' y='12' width='40' height='24' rx='8' fill='%23ff0033'/%3E%3Cpath d='M21 18.5v11l10-5.5z' fill='white'/%3E%3C/svg%3E",
+        wechat: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%2317bf32' d='M21 10C11.6 10 4 16.1 4 23.6c0 4.2 2.4 7.9 6.1 10.4l-1.3 4.7 5.4-2.7c2.1.8 4.4 1.2 6.8 1.2 9.4 0 17-6.1 17-13.6S30.4 10 21 10z'/%3E%3Cpath fill='%23ffffff' d='M15.5 21.2a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6zm11 0a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6z'/%3E%3Cpath fill='%230fb02d' d='M31 21c7.2 0 13 4.7 13 10.4 0 3.1-1.7 5.9-4.4 7.8l1 3.6-4.1-2c-1.7.6-3.5.9-5.5.9-7.2 0-13-4.7-13-10.4S23.8 21 31 21z'/%3E%3Cpath fill='%23ffffff' d='M27.2 29.4a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zm8.1 0a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8z'/%3E%3C/svg%3E",
         ipsb: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M2 12h20'/%3E%3Cpath d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'/%3E%3C/svg%3E",
         chatgpt: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310a37f'%3E%3Cpath d='M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.0462 6.0462 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.3829a.071.071 0 0 1-.038-.052V2.7482a4.4992 4.4992 0 0 1 4.4945 4.4944v5.8403a.7853.7853 0 0 0-.3832-.6813l-.2399-.6498zM6.803 3.3029l2.0201-1.1685a.0757.0757 0 0 1 .071 0l4.8303 2.7865a4.504 4.504 0 0 1 2.1461 3.8257l-.1466-.0852-4.783-2.7629a.7759.7759 0 0 0-.7854 0L4.3126 9.267V6.9346a.0804.0804 0 0 1 .0332-.0615l4.9522-3.2902a4.485 4.485 0 0 1-2.495 3.72zm8.1174 9.3485a4.4992 4.4992 0 0 1-6.1408 1.6511l-.1466-.0852 4.783-2.7582a.7759.7759 0 0 0 .3927-.6813v-6.7369l2.0201-1.1685a.0757.0757 0 0 1 .071 0l4.8303 2.7865a4.504 4.504 0 0 1-2.1461 3.8257zM11.9996 11.9996a1.1685 1.1685 0 1 1 1.1685-1.1685 1.1685 1.1685 0 0 1-1.1685 1.1685z'/%3E%3C/svg%3E",
         xcom: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'/%3E%3C/svg%3E",
@@ -1189,6 +1309,125 @@ function renderHtml(initData) {
         } catch (error) {
           clearTimeout(id);
           throw error;
+        }
+      };
+
+      const LATENCY_TARGETS = [
+        {
+          id: 'bytedance',
+          name: '字节跳动',
+          countryCode: 'CN',
+          icon: ICONS.bytedance,
+          url: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/uhbfnupkbps/toutiao_favicon.ico',
+          probe: 'image',
+          cacheBust: true,
+          timeout: 5000,
+        },
+        {
+          id: 'github',
+          name: 'GitHub',
+          countryCode: 'US',
+          icon: ICONS.github,
+          url: 'https://github.github.io/janky/images/bg_hr.png',
+          probe: 'image',
+          cacheBust: true,
+          timeout: 5000,
+        },
+        {
+          id: 'youtube',
+          name: 'YouTube',
+          countryCode: 'US',
+          icon: ICONS.youtube,
+          url: 'https://www.youtube.com/generate_204',
+          timeout: 5000,
+        },
+        {
+          id: 'wechat',
+          name: '微信',
+          countryCode: 'CN',
+          icon: ICONS.wechat,
+          url: 'https://res.wx.qq.com/a/wx_fed/assets/res/NTI4MWU5.ico',
+          probe: 'image',
+          cacheBust: true,
+          timeout: 5000,
+        },
+      ];
+
+      const CONNECTIVITY_SAMPLE_COUNT = 10;
+
+      const createEmptyLatencyResults = () => LATENCY_TARGETS.map((target) => ({
+        ...target,
+        latency: null,
+        status: 'pending',
+        error: null,
+        samples: Array.from({ length: CONNECTIVITY_SAMPLE_COUNT }, () => ({ status: 'pending', latency: null })),
+        sampleIndex: 0,
+        animationKey: target.id + '-pending',
+      }));
+
+      const appendCacheBust = (url) => {
+        const nextUrl = new URL(url, window.location.href);
+        nextUrl.searchParams.set('t', Date.now().toString());
+        return nextUrl.toString();
+      };
+
+      const loadImageWithTimeout = (url, timeout = 5000) => new Promise((resolve, reject) => {
+        const img = new Image();
+        let timerId = null;
+
+        const cleanup = () => {
+          img.onload = null;
+          img.onerror = null;
+          if (timerId) clearTimeout(timerId);
+        };
+
+        img.onload = () => {
+          cleanup();
+          resolve();
+        };
+
+        img.onerror = () => {
+          cleanup();
+          reject(new Error('图片加载失败'));
+        };
+
+        timerId = setTimeout(() => {
+          cleanup();
+          reject(new DOMException('The operation was aborted.', 'AbortError'));
+        }, timeout);
+
+        img.referrerPolicy = 'no-referrer';
+        img.decoding = 'async';
+        img.src = url;
+      });
+
+      const measureLatencyTarget = async (target) => {
+        const startedAt = performance.now();
+        const requestUrl = target.cacheBust ? appendCacheBust(target.url) : target.url;
+        try {
+          if (target.probe === 'image') {
+            await loadImageWithTimeout(requestUrl, target.timeout);
+          } else {
+            await fetchWithTimeout(requestUrl, {
+              method: target.method || 'GET',
+              mode: 'no-cors',
+              cache: 'no-store',
+              credentials: 'omit',
+              referrerPolicy: 'no-referrer',
+            }, target.timeout);
+          }
+
+          return {
+            latency: Math.max(1, Math.round(performance.now() - startedAt)),
+            status: 'ok',
+            error: null,
+          };
+        } catch (err) {
+          return {
+            latency: null,
+            status: 'timeout',
+            error: err?.name === 'AbortError' ? '请求超时' : '连接失败',
+          };
         }
       };
 
@@ -1911,8 +2150,179 @@ function renderHtml(initData) {
         );
       };
 
+      const getLatencyDisplay = (latency, status) => {
+        if (status === 'pending') {
+          return {
+            label: '检测中',
+            text: 'text-slate-400 dark:text-slate-500',
+          };
+        }
+
+        if (status !== 'ok' || typeof latency !== 'number') {
+          return {
+            label: '超时',
+            text: 'text-rose-600 dark:text-rose-300',
+          };
+        }
+
+        if (latency <= 80) {
+          return {
+            label: latency + 'ms',
+            text: 'text-emerald-700 dark:text-emerald-300',
+          };
+        }
+
+        if (latency <= 200) {
+          return {
+            label: latency + 'ms',
+            text: 'text-green-600 dark:text-green-300',
+          };
+        }
+
+        if (latency <= 500) {
+          return {
+            label: latency + 'ms',
+            text: 'text-amber-600 dark:text-amber-300',
+          };
+        }
+
+        return {
+          label: latency + 'ms',
+          text: 'text-rose-600 dark:text-rose-300',
+        };
+      };
+
+      const getLatencyDotClass = (sample) => {
+        if (!sample || sample.status === 'pending') return 'bg-slate-200 dark:bg-slate-700';
+        if (sample.status !== 'ok' || typeof sample.latency !== 'number') return 'bg-rose-500 dark:bg-rose-400';
+        if (sample.latency <= 200) return 'bg-green-600 dark:bg-green-400';
+        if (sample.latency <= 500) return 'bg-amber-500 dark:bg-amber-400';
+        return 'bg-rose-500 dark:bg-rose-400';
+      };
+
+      const ConnectivityCard = ({ item }) => {
+        const display = getLatencyDisplay(item.latency, item.status);
+        const flag = getFlagEmoji(item.countryCode);
+        const sampleCount = Math.min(item.sampleIndex || 0, CONNECTIVITY_SAMPLE_COUNT);
+
+        return (
+          <div className="connectivity-card" title={item.name + ' ' + sampleCount + '/' + CONNECTIVITY_SAMPLE_COUNT + ' ' + display.label}>
+            <img src={item.icon} alt={item.name} className="connectivity-icon" />
+            <div className="connectivity-main">
+              <span className="connectivity-name">
+                {item.name}
+                <span className="ml-1" title={item.countryCode}>{flag}</span>
+              </span>
+              <div className="connectivity-dots" aria-label={item.name + ' 连通性质量'}>
+                {item.samples.map((sample, index) => (
+                  <span
+                    key={index}
+                    className={'connectivity-dot ' + getLatencyDotClass(sample)}
+                  ></span>
+                ))}
+              </div>
+            </div>
+            <div className={'connectivity-ms ' + display.text}>
+              <span key={item.animationKey} className="connectivity-ms-value">
+                {display.label}
+              </span>
+            </div>
+          </div>
+        );
+      };
+
+      const ConnectivitySection = ({ className = '', style = {} }) => {
+        const [items, setItems] = useState(createEmptyLatencyResults);
+        const mountedRef = useRef(true);
+
+        useEffect(() => {
+          mountedRef.current = true;
+          let round = 0;
+          let timeoutId = null;
+          let cancelled = false;
+
+          const applyRoundResults = (roundIndex, results) => {
+            setItems((prev) => prev.map((item) => {
+              const result = results.find((entry) => entry.id === item.id) || {
+                latency: null,
+                status: 'timeout',
+                error: '连接失败',
+              };
+              const samples = item.samples.slice();
+              samples[roundIndex] = {
+                latency: result.latency,
+                status: result.status,
+              };
+              const shouldUpdateDisplay = roundIndex + 1 >= (item.sampleIndex || 0);
+
+              return {
+                ...item,
+                latency: shouldUpdateDisplay ? result.latency : item.latency,
+                status: shouldUpdateDisplay ? result.status : item.status,
+                error: shouldUpdateDisplay ? (result.error || null) : item.error,
+                samples,
+                sampleIndex: Math.max(item.sampleIndex || 0, roundIndex + 1),
+                animationKey: shouldUpdateDisplay
+                  ? item.id + '-' + roundIndex + '-' + (result.latency ?? result.status)
+                  : item.animationKey,
+              };
+            }));
+          };
+
+          const scheduleNextRound = () => {
+            if (cancelled || round >= CONNECTIVITY_SAMPLE_COUNT) return;
+            timeoutId = setTimeout(runRound, 1000);
+          };
+
+          const runRound = () => {
+            if (cancelled || round >= CONNECTIVITY_SAMPLE_COUNT) return;
+            const roundIndex = round;
+            round += 1;
+
+            ipService.measureConnectivity()
+              .then((results) => {
+                if (!mountedRef.current || cancelled) return;
+                applyRoundResults(roundIndex, results);
+              })
+              .catch(() => {
+                if (!mountedRef.current || cancelled) return;
+                applyRoundResults(roundIndex, LATENCY_TARGETS.map((target) => ({
+                  ...target,
+                  latency: null,
+                  status: 'timeout',
+                  error: '连接失败',
+                })));
+              })
+              .finally(() => {
+                if (!mountedRef.current || cancelled) return;
+                scheduleNextRound();
+              });
+          };
+
+          runRound();
+
+          return () => {
+            cancelled = true;
+            mountedRef.current = false;
+            clearTimeout(timeoutId);
+          };
+        }, []);
+
+        return (
+          <section className={'connectivity-section ' + className} style={style}>
+            <div className="connectivity-panel">
+              <div className="connectivity-grid">
+                {items.map((item) => (
+                  <ConnectivityCard key={item.id} item={item} />
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
       // --- 泄漏检测卡片组件 ---
-      const LeakDetectionCard = ({ icon: Icon, title, subtitle = '', isLoading, status, statusText, showStatus = true, tone, children }) => {
+      const LeakDetectionCard = ({ icon: Icon, title, subtitle = '', isLoading, status, statusText, showStatus = true, tone, bodyClassName = '', children }) => {
         const statusConfig = {
           safe: { badge: 'border border-emerald-200/70 bg-emerald-50/90 text-emerald-700 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-300' },
           leak: { badge: 'border border-rose-200/70 bg-rose-50/90 text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-rose-300' },
@@ -1943,11 +2353,18 @@ function renderHtml(initData) {
                 </span>
               ) : null}
             </div>
-            <div className="relative p-5 flex-1 flex flex-col justify-center">
+            <div className={'relative p-5 flex-1 flex flex-col justify-center ' + bodyClassName}>
               {isLoading ? (
-                <div className="space-y-3 animate-pulse">
-                  <div className="h-6 bg-slate-100 dark:bg-slate-700 rounded w-3/4 mx-auto"></div>
-                  <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-1/2 mx-auto"></div>
+                <div className="text-center animate-pulse">
+                  <div className="h-12 flex items-center justify-center">
+                    <div className="h-6 bg-slate-100 dark:bg-slate-700 rounded w-3/4 mx-auto"></div>
+                  </div>
+                  <div className="mt-3 h-7 flex items-center justify-center">
+                    <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-14"></div>
+                  </div>
+                  <div className="mt-1 h-7 flex items-center justify-center">
+                    <div className="h-6 bg-slate-100 dark:bg-slate-700 rounded-lg w-24"></div>
+                  </div>
                 </div>
               ) : children}
             </div>
@@ -1955,10 +2372,12 @@ function renderHtml(initData) {
         );
       };
 
-      const WebRTCProviderCard = ({ provider, isLoading, stylePreset }) => {
+      const WebRTCProviderCard = ({ provider, isLoading, hasChecked, stylePreset }) => {
         const providerStatus = isLoading
           ? { status: 'unknown', text: '检测中...' }
-          : deriveWebRTCStatus(provider);
+          : hasChecked
+            ? deriveWebRTCStatus(provider)
+            : { status: 'unknown', text: '未开始' };
         const tone = getWebRTCTone(provider.id, stylePreset);
 
         return (
@@ -1970,8 +2389,23 @@ function renderHtml(initData) {
             statusText={providerStatus.text}
             showStatus={true}
             tone={tone}
+            bodyClassName="h-32"
           >
-            {provider.error && (!provider.ip || provider.ip === '-') ? (
+            {!hasChecked ? (
+              <div className="text-center">
+                <div className="h-12 flex items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                  等待开始检测
+                </div>
+                <div className="mt-3 h-7 flex items-center justify-center text-xs text-slate-400 dark:text-slate-500">
+                  点击上方按钮后显示结果
+                </div>
+                <div className="mt-1 h-7 flex items-center justify-center">
+                  <div className="subtle-pill text-xs text-slate-500 dark:text-slate-300 font-medium px-2.5 py-1 rounded-lg inline-block max-w-full truncate">
+                    {provider.address}
+                  </div>
+                </div>
+              </div>
+            ) : provider.error && (!provider.ip || provider.ip === '-') ? (
               <div className="text-center">
                 <div className="mx-auto max-w-full rounded-xl border border-amber-200/70 bg-amber-50/80 px-3 py-2 text-sm font-medium text-amber-700 dark:border-amber-900/50 dark:bg-amber-900/20 dark:text-amber-300 break-words">
                   {provider.error}
@@ -2010,7 +2444,7 @@ function renderHtml(initData) {
 
       // --- 泄漏检测区域 ---
       const LeakDetectionSection = ({ stylePreset }) => {
-        const [webrtc, setWebrtc] = useState({ loading: true, providers: createEmptyWebRTCProviders(), error: null });
+        const [webrtc, setWebrtc] = useState({ loading: false, providers: createEmptyWebRTCProviders(), error: null });
         const [lastCheckedAt, setLastCheckedAt] = useState(null);
         const mountedRef = useRef(true);
 
@@ -2039,12 +2473,13 @@ function renderHtml(initData) {
         }, []);
 
         useEffect(() => {
-          runLeakChecks();
-
           return () => {
             mountedRef.current = false;
           };
-        }, [runLeakChecks]);
+        }, []);
+
+        const hasChecked = Boolean(lastCheckedAt);
+        const buttonText = webrtc.loading ? '检测中' : (hasChecked ? '重新检测' : '开始检测');
 
         return (
           <div className="mt-10">
@@ -2067,18 +2502,20 @@ function renderHtml(initData) {
                     className="action-button inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 disabled:opacity-60 disabled:cursor-not-allowed transition"
                   >
                     <RefreshCcw className={'w-4 h-4 ' + (webrtc.loading ? 'animate-spin text-indigo-500' : 'text-slate-500')} />
-                    重新检测
+                    {buttonText}
                   </button>
-                  <span className="text-xs text-slate-400 dark:text-slate-500">
-                    {lastCheckedAt ? ('上次检测: ' + lastCheckedAt.toLocaleTimeString('zh-CN', { hour12: false })) : '尚未完成检测'}
-                  </span>
+                  {lastCheckedAt ? (
+                    <span className="text-xs text-slate-400 dark:text-slate-500">
+                      {'上次检测: ' + lastCheckedAt.toLocaleTimeString('zh-CN', { hour12: false })}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {webrtc.providers.map((provider) => (
-                <WebRTCProviderCard key={provider.id} provider={provider} isLoading={webrtc.loading} stylePreset={stylePreset} />
+                <WebRTCProviderCard key={provider.id} provider={provider} isLoading={webrtc.loading} hasChecked={hasChecked} stylePreset={stylePreset} />
                 ))}
               </div>
           </div>
@@ -2100,6 +2537,14 @@ function renderHtml(initData) {
 
       // --- 数据服务层 (客户端直接请求) ---
       const ipService = {
+        measureConnectivity: async () => {
+          return await Promise.all(
+            LATENCY_TARGETS.map(async (target) => ({
+              ...target,
+              ...(await measureLatencyTarget(target)),
+            }))
+          );
+        },
         fetchChatGPT: createTraceFetcher('https://chatgpt.com/cdn-cgi/trace'),
         fetchXcom: createTraceFetcher('https://help.x.com/cdn-cgi/trace'),
         fetchOpenAI: createTraceFetcher('https://openai.com/cdn-cgi/trace'),
@@ -2122,25 +2567,39 @@ function renderHtml(initData) {
             return buildSourceSuccessResult({ ip: data.ip, isp: data.isp, countryCode: data.country_code, countryName: data.country });
           } catch (e) { return createSourceErrorResult('加载失败'); }
         },
-        // IPAPI.is 基础信息查询 (优先使用官方 API，失败后回退备用端点)
+        // IP 基础信息查询 (优先使用 ipinfo.io，失败后回退 IPAPI.is)
         fetchIpApi: async () => {
-          const parseIpApiResponse = (data) => buildSourceSuccessResult({
-            ip: data.ip,
-            isp: data.asn?.org,
-            countryCode: data.location?.country_code,
-            countryName: data.location?.country,
-          });
           try {
-            const res = await fetchWithTimeout('https://api.ipapi.is/', {}, 5000);
+            const res = await fetchWithTimeout(\`https://api.cmliussss.net/api/ipinfo?_t=\${Date.now()}\`);
             if (!res.ok) throw new Error('Error');
             const data = await res.json();
-            return parseIpApiResponse(data);
+            const result = buildSourceSuccessResult({
+              ip: data.ip,
+              isp: data.org || data.asn?.org || data.isp,
+              countryCode: data.country_code || data.country || data.location?.country_code,
+              countryName: data.country_name || data.location?.country || data.city || data.region,
+            });
+            return {
+              ...result,
+              sourceName: 'ipinfo.io',
+              sourceUrl: 'https://ipinfo.io/',
+            };
           } catch (e) {
             try {
-              const res = await fetchWithTimeout('https://api.ipapi.cmliussss.net/');
+              const res = await fetchWithTimeout('https://api.ipapi.is/', {}, 5000);
               if (!res.ok) throw new Error('Error');
               const data = await res.json();
-              return parseIpApiResponse(data);
+              const result = buildSourceSuccessResult({
+                ip: data.ip,
+                isp: data.asn?.org,
+                countryCode: data.location?.country_code,
+                countryName: data.location?.country,
+              });
+              return {
+                ...result,
+                sourceName: 'IPAPI.is',
+                sourceUrl: 'https://ipapi.is',
+              };
             } catch (e2) { return createSourceErrorResult('加载失败'); }
           }
         },
@@ -2237,10 +2696,6 @@ function renderHtml(initData) {
         const [detailError, setDetailError] = useState(null);
         const [stylePreset, setStylePreset] = useState(() => normalizeStylePreset(document.documentElement.dataset.style || localStorage.getItem('style-preset')));
 
-        const readyCount = rows.filter((row) => isSuccessfulRowResult(row)).length;
-        const errorCount = rows.filter((row) => !row.isLoading && !!row.error).length;
-        const countryCount = new Set(rows.filter((row) => isSuccessfulRowResult(row)).map((row) => normalizeCountryCode(row.countryCode)).filter(Boolean)).size;
-
         const updateRow = useCallback((id, data) => {
           setRows((prev) => prev.map((row) => (row.id === id ? { ...row, ...data, isLoading: false } : row)));
         }, []);
@@ -2298,21 +2753,7 @@ function renderHtml(initData) {
 
             <main className="relative z-10 py-6">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="hero-panel mb-5 text-center md:text-left surface-strong rounded-3xl p-5 md:p-6">
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-                  <div>
-                    <h2 className="hero-title text-[1.45rem] md:text-[2.05rem] font-semibold mb-2 title-gradient">网络身份分析</h2>
-                    <p className="text-slate-600/90 dark:text-slate-300/90 max-w-xl leading-relaxed md:text-[15px]">
-                      分析各服务商下的连接可见性,检测 IP 暴露情况。
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                    <span className="hero-chip">已就绪: {readyCount}</span>
-                    <span className="hero-chip">异常: {errorCount}</span>
-                    <span className="hero-chip">地区数: {countryCount}</span>
-                  </div>
-                </div>
-                </div>
+                <ConnectivitySection className="mb-5" style={{ marginTop: 0 }} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {rows.map((row) => (

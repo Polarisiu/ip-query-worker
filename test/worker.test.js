@@ -211,11 +211,31 @@ describe('helper logic', () => {
 });
 
 describe('rendered client script', () => {
+  it('pins Babel standalone to a stable major version', async () => {
+    const response = await runRequest(new Request('https://example.com/'));
+    const html = await response.text();
+
+    expect(html).toContain('https://unpkg.com/@babel/standalone@7.29.7/babel.min.js');
+  });
+
   it('encodes ip when requesting /api/ipapi details', async () => {
     const response = await runRequest(new Request('https://example.com/'));
     const html = await response.text();
 
     expect(html).toContain('/api/ipapi?q=${encodeURIComponent(ip)}');
+  });
+
+  it('falls back from ipapi.is to the cmliussss ipinfo proxy and relabels the card', async () => {
+    const response = await runRequest(new Request('https://example.com/'));
+    const html = await response.text();
+
+    expect(html).toContain('https://api.ipapi.is/');
+    expect(html).toContain('https://api.cmliussss.net/api/ipinfo?_t=${Date.now()}');
+    expect(html).not.toContain('https://api.ipapi.cmliussss.net/');
+    expect(html).toContain("sourceName: 'ipinfo.io'");
+    expect(html).toContain("sourceUrl: 'https://ipinfo.io/'");
+    expect(html).toContain('countryCode: data.country_code || data.country || data.location?.country_code');
+    expect(html).toContain('countryName: data.country_name || data.location?.country || data.city || data.region');
   });
 
   it('ships the new client-side guardrails and helper functions', async () => {
@@ -227,6 +247,26 @@ describe('rendered client script', () => {
     expect(html).toContain("const canViewDetails = !isLoading && !error && typeof onViewDetails === 'function' && isQueryableTarget(ip);");
     expect(html).toContain('if (!isQueryableTarget(ip)) return;');
     expect(html).toContain('WebRTC IP检测');
+    expect(html).toContain('measureConnectivity');
+    expect(html).toContain('const CONNECTIVITY_SAMPLE_COUNT = 10;');
+    expect(html).toContain('connectivity-ms-value');
+    expect(html).toContain('timeoutId = setTimeout(runRound, 1000);');
+    expect(html).toContain('scheduleNextRound();');
+    expect(html).toContain("name: '字节跳动'");
+    expect(html).toContain("name: 'GitHub'");
+    expect(html).toContain("name: 'YouTube'");
+    expect(html).toContain("name: '微信'");
+    expect(html).toContain("url: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/uhbfnupkbps/toutiao_favicon.ico'");
+    expect(html).toContain("url: 'https://github.github.io/janky/images/bg_hr.png'");
+    expect(html).toContain("url: 'https://www.youtube.com/generate_204'");
+    expect(html).toContain("url: 'https://res.wx.qq.com/a/wx_fed/assets/res/NTI4MWU5.ico'");
+    expect(html).toContain("probe: 'image'");
+    expect(html).toContain('cacheBust: true');
+    expect(html).toContain('const loadImageWithTimeout = (url, timeout = 5000) => new Promise');
+    expect(html).toContain("if (target.probe === 'image')");
+    expect(html).toContain("nextUrl.searchParams.set('t', Date.now().toString())");
+    expect(html).not.toContain('className="hero-panel mb-5');
+    expect(html).not.toContain('timeout: 6000');
     expect(html).not.toContain('疑似泄漏');
     expect(html).not.toContain('一致性比对');
   });
